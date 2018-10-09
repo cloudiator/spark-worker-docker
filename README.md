@@ -23,6 +23,6 @@ Default configuration options:
 ### Usage:
 
 ```dockerfile
-docker run -d -e SPARK_MASTER_ENDPOINT=1.2.3.4 -e SPARK_MASTER_PORT=7077 -SPARK_WORKER_UI_PORT=8081 -p 9999:9999 -p 8081:8081   cloudiator/spark-worker-docker:latest
+docker run -d -e SPARK_MASTER_ENDPOINT=1.2.3.4 -e SPARK_MASTER_PORT=7077 -e SPARK_WORKER_UI_PORT=8081 -p 9999:9999 -p 8081:8081   cloudiator/spark-worker:latest
 ```
 
