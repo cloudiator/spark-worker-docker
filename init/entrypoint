@@ -64,8 +64,14 @@ function spark_worker_service(){
 
     export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
     export LOCAL_ADDRESS=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
+    export PUBLIC_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
+
+    echo "SPARK_PUBLIC_DNS=$PUBLIC_ADDRESS"  >> /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-env.sh
+    echo "SPARK_LOCAL_IP=$LOCAL_ADDRESS"  >> /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-env.sh
+    echo "SPARK_MASTER_HOST=$LOCAL_ADDRESS"  >> /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-env.sh
+    
     echo "starting Spark Worker!"
-    /opt/spark-2.3.1-bin-hadoop2.7/sbin/start-slave.sh  spark://$SPARK_MASTER_ENDPOINT:$SPARK_MASTER_PORT -h ${LOCAL_ADDRESS} --webui-port $SPARK_WORKER_UI_PORT
+    /opt/spark-2.3.1-bin-hadoop2.7/sbin/start-slave.sh  spark://$SPARK_MASTER_ENDPOINT:$SPARK_MASTER_PORT --webui-port $SPARK_WORKER_UI_PORT
 
     # whatever blocking call 
     tail -f /dev/null
