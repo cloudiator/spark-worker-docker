@@ -22,7 +22,7 @@ ADD conf /opt/docker-conf
 RUN chmod +x /opt/docker-conf/spark-env.sh
 
 # apache spark
-RUN wget http://ftp.ps.pl/pub/apache/spark/spark-2.3.2/spark-2.3.2-bin-hadoop2.7.tgz -O /tmp/spark-2.3.2-bin-hadoop2.7.tgz
+RUN wget http://ftp.man.poznan.pl/apache/spark/spark-2.3.2/spark-2.3.2-bin-hadoop2.7.tgz -O /tmp/spark-2.3.2-bin-hadoop2.7.tgz
 RUN  tar -xvzf /tmp/spark-2.3.2-bin-hadoop2.7.tgz -C /opt/
 
  
