@@ -25,8 +25,8 @@ RUN chmod +x /opt/docker-conf/spark-env.sh
 
 
 # apache spark
-RUN wget http://mirror.dkd.de/apache/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz -O /tmp/spark-2.3.1-bin-hadoop2.7.tgz
-RUN  tar -xvzf /tmp/spark-2.3.1-bin-hadoop2.7.tgz -C /opt/
+RUN wget http://ftp.ps.pl/pub/apache/spark/spark-2.3.2/spark-2.3.2-bin-hadoop2.7.tgz -O /tmp/spark-2.3.2-bin-hadoop2.7.tgz
+RUN  tar -xvzf /tmp/spark-2.3.2-bin-hadoop2.7.tgz -C /opt/
 
  
 # expose ports

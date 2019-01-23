@@ -34,12 +34,14 @@ function writeConfigOptions(){
     export SPARK_MASTER_ENDPOINT=$SPARK_MASTER_ENDPOINT
     export SPARK_MASTER_PORT=$SPARK_MASTER_PORT
     export SPARK_WORKER_UI_PORT=$SPARK_WORKER_UI_PORT
+
+    export SPARK_VERSION=2.3.2 
         
     #cat /opt/docker-conf/livy.conf | envsubst > /opt/spark-2.3.1-bin-hadoop2.7/livy.conf
     #TODO use envsubst if env vars are passed to the entrypoint
-    cp /opt/docker-conf/log4j.properties /opt/spark-2.3.1-bin-hadoop2.7/conf/log4j.properties
-    cp /opt/docker-conf/spark-defaults.conf /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-defaults.conf
-    cp /opt/docker-conf/spark-env.sh /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-env.sh
+    cp /opt/docker-conf/log4j.properties /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/log4j.properties
+    cp /opt/docker-conf/spark-defaults.conf /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-defaults.conf
+    cp /opt/docker-conf/spark-env.sh /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-env.sh
 }
 
 function init(){
@@ -66,12 +68,12 @@ function spark_worker_service(){
     export LOCAL_ADDRESS=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
     export PUBLIC_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
-    echo "SPARK_PUBLIC_DNS=$PUBLIC_ADDRESS"  >> /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-env.sh
-    echo "SPARK_LOCAL_IP=$LOCAL_ADDRESS"  >> /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-env.sh
-    echo "SPARK_MASTER_HOST=$LOCAL_ADDRESS"  >> /opt/spark-2.3.1-bin-hadoop2.7/conf/spark-env.sh
+    echo "SPARK_PUBLIC_DNS=$PUBLIC_ADDRESS"  >> /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-env.sh
+    echo "SPARK_LOCAL_IP=$LOCAL_ADDRESS"  >> /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-env.sh
+    echo "SPARK_MASTER_HOST=$LOCAL_ADDRESS"  >> /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-env.sh
     
     echo "starting Spark Worker!"
-    /opt/spark-2.3.1-bin-hadoop2.7/sbin/start-slave.sh  spark://$SPARK_MASTER_ENDPOINT:$SPARK_MASTER_PORT --webui-port $SPARK_WORKER_UI_PORT
+    /opt/spark-$SPARK_VERSION-bin-hadoop2.7/sbin/start-slave.sh  spark://$SPARK_MASTER_ENDPOINT:$SPARK_MASTER_PORT --webui-port $SPARK_WORKER_UI_PORT
 
     # whatever blocking call 
     tail -f /dev/null
