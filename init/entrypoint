@@ -35,7 +35,7 @@ function writeConfigOptions(){
     export SPARK_MASTER_PORT=$SPARK_MASTER_PORT
     export SPARK_WORKER_UI_PORT=$SPARK_WORKER_UI_PORT
 
-    export SPARK_VERSION=2.3.2 
+    export SPARK_VERSION=2.3.1 
         
     #cat /opt/docker-conf/livy.conf | envsubst > /opt/spark-2.3.1-bin-hadoop2.7/livy.conf
     #TODO use envsubst if env vars are passed to the entrypoint
