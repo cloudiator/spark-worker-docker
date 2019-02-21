@@ -25,6 +25,10 @@ RUN chmod +x /opt/docker-conf/spark-env.sh
 RUN wget https://archive.apache.org/dist/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz -O /tmp/spark-2.3.1-bin-hadoop2.7.tgz
 RUN  tar -xvzf /tmp/spark-2.3.1-bin-hadoop2.7.tgz -C /opt/
 
+# metric agent
+RUN mkdir /opt/metric-agent
+RUN wget https://nexus.7bulls.eu/repository/maven-public/eu/melodic/metric-generator/0.0.1-SNAPSHOT/metric-generator-0.0.1-20190131.100000-72-jar-with-dependencies.jar -O /opt/metric-agent/metric-agent.jar
+RUN mv /opt/docker-conf/metric.generator.properties /opt/metric-agent/metric.generator.properties
  
 # expose ports
 EXPOSE 8080

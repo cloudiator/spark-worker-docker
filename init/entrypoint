@@ -13,6 +13,8 @@ GLOBAL_VAR="xyz"
 # validate if all container variables are set
 ##############################################################################
 function validate(){
+
+    # manadatory ENV vars
     vars="SPARK_MASTER_ENDPOINT SPARK_MASTER_PORT SPARK_WORKER_UI_PORT"
     for var in $vars; do
         if [[ $(env | awk -F "=" '{print $1}' | grep "^$var$") != "$var" ]]; then
@@ -20,6 +22,38 @@ function validate(){
             return 1
         fi
     done
+    # optional ENV vars
+    if [ -z "$JMS_IP" ]; 
+	then
+		echo "JMS_IP not set, falling back to default value"
+        JMS_IP=localhost
+    fi  
+
+    if [ -z "$JMS_PORT" ]; 
+	then
+		echo "JMS_PORT not set, falling back to default value"
+        JMS_PORT=61616
+    fi  
+
+    if [ -z "$APP_NAME" ]; 
+	then
+		echo "APP_NAME not set, falling back to default value"
+        APP_NAME=dummyapp
+    fi  
+
+    if [ -z "$METRIC_PATTERN" ]; 
+	then
+		echo "METRIC_PATTERN not set, falling back to default value"
+        METRIC_PATTERN={"metricValue":"\${metric.value}","timestamp":"\${metric.timestamp}","metricName":"\${metric.name}"}
+    fi  
+
+    if [ -z "$METRIC_REPORTING_INTERVAL" ]; 
+	then
+		echo "METRIC_REPORTING_INTERVAL not set, falling back to default value"
+        METRIC_REPORTING_INTERVAL=30
+    fi  
+
+    # global ENV vars
     if [[ -z ${GLOBAL_VAR+x} ]]; then
         echo "GLOBAL_VAR variable cannot be looked up."
         return 1
@@ -34,6 +68,13 @@ function writeConfigOptions(){
     export SPARK_MASTER_ENDPOINT=$SPARK_MASTER_ENDPOINT
     export SPARK_MASTER_PORT=$SPARK_MASTER_PORT
     export SPARK_WORKER_UI_PORT=$SPARK_WORKER_UI_PORT
+
+    export JMS_IP=$JMS_IP
+    export JMS_PORT=$JMS_PORT
+    export APP_NAME=$APP_NAME
+    export PUBLIC_ADDRESS=$PUBLIC_IP
+    export METRIC_PATTERN=$METRIC_PATTERN
+    export METRIC_REPORTING_INTERVAL=$METRIC_REPORTING_INTERVAL
 
     export SPARK_VERSION=2.3.1 
         
@@ -79,9 +120,27 @@ function spark_worker_service(){
     tail -f /dev/null
 }
 
+function metric_agent_service(){
+
+    #TODO: set endpoints for spark master and jms
+
+    # Set Spark Master Metrics Endpoint    
+    echo "collector.url=http://$LOCAL_ADDRESS:4040" >> /opt/metric-agent/metric.generator.properties
+    
+    # Set JMS Endpoint
+    echo "jms.server.address=tcp://$JMS_IP" >> /opt/metric-agent/metric.generator.properties
+    echo "jms.sever.port=$JMS_PORT" >> /opt/metric-agent/metric.generator.properties
+    echo "collector.url.application.name=$APP_NAME" >> /opt/metric-agent/metric.generator.properties
+    echo "metric.pattern=$METRIC_PATTERN" >> /opt/metric-agent/metric.generator.properties
+    echo "collector.checking.time=$METRIC_REPORTING_INTERVAL" >> /opt/metric-agent/metric.generator.properties 
+
+    java -jar /opt/metric-agent/metric-agent.jar -p /opt/metric-agent/metric.generator.properties
+
+}
+
 function start(){
 
-    bgo spark_worker_service
+    bgo spark_worker_service metric_agent_service
     if [[ $? != 0 ]]; then
         echo "start failed. exiting now." >&2
         exit 1
