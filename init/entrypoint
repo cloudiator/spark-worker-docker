@@ -123,7 +123,7 @@ function spark_worker_service(){
 function metric_agent_service(){
 
     # Set Spark Master Metrics Endpoint    
-    echo -e "collector.url=http://$LOCAL_ADDRESS:4040\n" >> /opt/metric-agent/metric.generator.properties
+    echo -e "\ncollector.url=http://$LOCAL_ADDRESS:4040\n" >> /opt/metric-agent/metric.generator.properties
     
     # Set JMS Endpoint
     echo -e "jms.server.address=tcp://$JMS_IP\n" >> /opt/metric-agent/metric.generator.properties
