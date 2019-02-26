@@ -123,14 +123,14 @@ function spark_worker_service(){
 function metric_agent_service(){
 
     # Set Spark Master Metrics Endpoint    
-    echo "collector.url=http://$LOCAL_ADDRESS:4040" >> /opt/metric-agent/metric.generator.properties
+    echo -e "collector.url=http://$LOCAL_ADDRESS:4040\n" >> /opt/metric-agent/metric.generator.properties
     
     # Set JMS Endpoint
-    echo "jms.server.address=tcp://$JMS_IP" >> /opt/metric-agent/metric.generator.properties
-    echo "jms.sever.port=$JMS_PORT" >> /opt/metric-agent/metric.generator.properties
-    echo "collector.url.application.name=$APP_NAME" >> /opt/metric-agent/metric.generator.properties
-    echo "metric.pattern=$METRIC_PATTERN" >> /opt/metric-agent/metric.generator.properties
-    echo "collector.checking.time=$METRIC_REPORTING_INTERVAL" >> /opt/metric-agent/metric.generator.properties 
+    echo -e "jms.server.address=tcp://$JMS_IP\n" >> /opt/metric-agent/metric.generator.properties
+    echo -e "jms.sever.port=$JMS_PORT\n" >> /opt/metric-agent/metric.generator.properties
+    echo -e "collector.url.application.name=$APP_NAME\n" >> /opt/metric-agent/metric.generator.properties
+    echo -e "metric.pattern=$METRIC_PATTERN\n" >> /opt/metric-agent/metric.generator.properties
+    echo -e "collector.checking.time=$METRIC_REPORTING_INTERVAL\n" >> /opt/metric-agent/metric.generator.properties 
 
     java -jar /opt/metric-agent/metric-agent.jar -p /opt/metric-agent/metric.generator.properties
 
