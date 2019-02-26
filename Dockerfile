@@ -21,6 +21,10 @@ RUN chmod +x  /opt/docker-init/entrypoint
 ADD conf /opt/docker-conf
 RUN chmod +x /opt/docker-conf/spark-env.sh
 
+# set Python3 as default
+RUN rm  /usr/bin/python
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
 # apache spark
 RUN wget https://archive.apache.org/dist/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz -O /tmp/spark-2.3.1-bin-hadoop2.7.tgz
 RUN  tar -xvzf /tmp/spark-2.3.1-bin-hadoop2.7.tgz -C /opt/
