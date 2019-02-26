@@ -77,6 +77,8 @@ function writeConfigOptions(){
     export METRIC_REPORTING_INTERVAL=$METRIC_REPORTING_INTERVAL
 
     export SPARK_VERSION=2.3.1 
+    export LOCAL_ADDRESS=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
+    export PUBLIC_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
         
     #cat /opt/docker-conf/livy.conf | envsubst > /opt/spark-2.3.1-bin-hadoop2.7/livy.conf
     #TODO use envsubst if env vars are passed to the entrypoint
@@ -106,9 +108,7 @@ function init(){
 function spark_worker_service(){
 
     export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-    export LOCAL_ADDRESS=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
-    export PUBLIC_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
-
+   
     echo "SPARK_PUBLIC_DNS=$PUBLIC_ADDRESS"  >> /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-env.sh
     echo "SPARK_LOCAL_IP=$LOCAL_ADDRESS"  >> /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-env.sh
     echo "SPARK_MASTER_HOST=$LOCAL_ADDRESS"  >> /opt/spark-$SPARK_VERSION-bin-hadoop2.7/conf/spark-env.sh
@@ -121,8 +121,6 @@ function spark_worker_service(){
 }
 
 function metric_agent_service(){
-
-    #TODO: set endpoints for spark master and jms
 
     # Set Spark Master Metrics Endpoint    
     echo "collector.url=http://$LOCAL_ADDRESS:4040" >> /opt/metric-agent/metric.generator.properties
