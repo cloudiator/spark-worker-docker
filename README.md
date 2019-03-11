@@ -2,7 +2,7 @@
 
 Based on the latest release of [Apache Spark](http://spark.apache.org/)
 
-Current release: Spark 2.3.1 with Hadoop 2.7
+Current release: Spark 2.3.1 with Hadoop 2.7 
 
 ------
 
