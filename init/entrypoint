@@ -53,6 +53,18 @@ function validate(){
         METRIC_REPORTING_INTERVAL=30
     fi  
 
+    if [ -z "$JMS_USER" ]; 
+	then
+		echo "JMS_USER not set, falling back to default value"
+        JMS_USER=aaa
+    fi  
+
+    if [ -z "$JMS_PASSWORD" ]; 
+	then
+		echo "JMS_PASSWORD not set, falling back to default value"
+        JMS_PASSWORD=111
+    fi  
+
     # global ENV vars
     if [[ -z ${GLOBAL_VAR+x} ]]; then
         echo "GLOBAL_VAR variable cannot be looked up."
@@ -75,6 +87,8 @@ function writeConfigOptions(){
     export PUBLIC_ADDRESS=$PUBLIC_IP
     export METRIC_PATTERN=$METRIC_PATTERN
     export METRIC_REPORTING_INTERVAL=$METRIC_REPORTING_INTERVAL
+    export JMS_USER=$JMS_USER
+    export JMS_PASSWORD=$JMS_PASSWORD
 
     export SPARK_VERSION=2.3.1 
     export LOCAL_ADDRESS=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
@@ -131,6 +145,9 @@ function metric_agent_service(){
     echo -e "collector.url.application.name=$APP_NAME\n" >> /opt/metric-agent/metric.generator.properties
     echo -e "metric.pattern=$METRIC_PATTERN\n" >> /opt/metric-agent/metric.generator.properties
     echo -e "collector.checking.time=$METRIC_REPORTING_INTERVAL\n" >> /opt/metric-agent/metric.generator.properties 
+    echo -e "jms.server.username=$JMS_USER\n" >> /opt/metric-agent/metric.generator.properties 
+    echo -e "jms.server.password=$JMS_PASSWORD\n" >> /opt/metric-agent/metric.generator.properties 
+
 
     java -jar /opt/metric-agent/metric-agent.jar -p /opt/metric-agent/metric.generator.properties
 

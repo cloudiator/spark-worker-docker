@@ -18,6 +18,18 @@ Default configuration options:
 
 - SPARK_WORKER_PORT=9999 => static configurations for all Spark Workers
 
+Optional configuration options to report to JMS:
+
+- JMS_IP => JMS IP for the Metric Agent
+
+- JMS_PORT => JMS PORT for the Metric Agent
+
+- APP_NAME => name of the application to monitor
+
+- JMS_USER => username to authenticate against the JMS to report metrics
+
+- JMS_PASSWORD => password to authenticate against the JMS to report metrics
+
 ------
 
 ### Usage:
