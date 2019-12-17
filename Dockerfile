@@ -31,7 +31,7 @@ RUN  tar -xvzf /tmp/spark-2.3.1-bin-hadoop2.7.tgz -C /opt/
 
 # metric agent
 RUN mkdir /opt/metric-agent
-RUN wget -O /opt/metric-agent/metric-agent.jar https://nexus.7bulls.eu:8443/repository/maven-public/eu/melodic/metric-generator/3.0.0-SNAPSHOT/metric-generator-3.0.0-20191113.123635-1-jar-with-dependencies.jar
+RUN wget -O /opt/metric-agent/metric-agent.jar https://nexus.7bulls.eu:8443/repository/maven-public/eu/melodic/metric-generator/3.0.0-SNAPSHOT/metric-generator-3.0.0-20191212.140151-2-jar-with-dependencies.jar
 
 RUN mv /opt/docker-conf/metric.generator.properties /opt/metric-agent/metric.generator.properties
  
