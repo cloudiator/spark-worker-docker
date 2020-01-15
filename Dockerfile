@@ -10,6 +10,8 @@ RUN add-apt-repository ppa:webupd8team/java -y && apt-get update && apt-get -y i
 
 
 # use bpkg to handle complex bash entrypoints
+# setting this env explicitly is required to get the bpkg install script working 
+ENV USER=root
 RUN curl -Lo- "https://raw.githubusercontent.com/bpkg/bpkg/master/setup.sh" | bash
 RUN bpkg install cha87de/bashutil -g
 ## add more bash dependencies, if necessary 
